@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import (ListView, UpdateView, DeleteView, DetailView,
                                   CreateView)
 from django.urls import reverse_lazy
@@ -10,9 +10,7 @@ from django.db.models import Count
 from django.http import Http404
 
 
-
 from .forms import CommentForm, PostForm, UserForm
-from blog.constants import POST_COUNT
 from blog.models import Comment, Post, Category
 
 
