@@ -220,4 +220,3 @@ class PostUpdateView(PostMixin, LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['is_edit'] = True
         return context
-    
