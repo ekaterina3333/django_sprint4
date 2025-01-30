@@ -5,9 +5,9 @@ from django.urls import include, path, reverse_lazy
 from django.conf.urls.static import static
 from django.conf import settings
 
-handler403 = 'blogicum.views.csrf_failure'
-handler404 = 'blogicum.views.page_not_found'
-handler500 = "blogicum.views.server_error"
+handler403 = 'pages.views.csrf_failure'
+handler404 = 'pages.views.page_not_found'
+handler500 = "pages.views.server_error"
 urlpatterns = [
     path('', include('blog.urls', namespace='blog')),
     path('pages/', include('pages.urls', namespace='pages')),

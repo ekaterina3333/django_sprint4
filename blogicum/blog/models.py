@@ -2,10 +2,21 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 
-from blog.constants import CHAR_LENGTH
-from blogicum.models import PublishedModel
+from .constants import CHAR_LENGTH, TEXT_CONST
 
 User = get_user_model()
+
+
+class PublishedModel(models.Model):
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name='Опубликовано',
+        help_text='Снимите галочку, чтобы скрыть публикацию.')
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      verbose_name='Добавлено')
+
+    class Meta:
+        abstract = True
 
 
 class Category(PublishedModel):
@@ -88,4 +99,4 @@ class Comment(PublishedModel):
         ordering = ('created_at',)
 
     def __str__(self):
-        return self.text[:15]
+        return self.text[:TEXT_CONST]
