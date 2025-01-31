@@ -19,13 +19,14 @@ def filters_post(manage):
         pub_date__lt=tz.now(),
         is_published=True,
         category__is_published=True,
-    ).annotate(comment_count=Count('comments'))
+    ).annotate(comment_count=Count('comments')
+               ).select_related('author').order_by('-pub_date')
 
 
 class IndexListView(ListView):
     model = Post
     queryset = filters_post(Post.objects.prefetch_related(
-        'comments')).select_related('author')
+        'comments'))
     template_name = 'blog/index.html'
     ordering = '-pub_date'
     paginate_by = PAGINATE_COUNT
@@ -103,7 +104,7 @@ class CategoryListView(ListView):
             is_published=True
         )
 
-        queryset = filters_post(category.posts).order_by('-pub_date')
+        queryset = filters_post(category.posts)
         return queryset
 
 
@@ -140,10 +141,13 @@ class ProfileListView(ListView):
     def get_queryset(self):
         author = get_object_or_404(User, username=self.kwargs.get('username'))
         instance = author.posts.filter(
-            author=author
-        ).annotate(
-            comment_count=Count('comments')
-        ).order_by('-pub_date')
+            author=author).annotate(comment_count=Count('comments')
+                                    ).order_by('-pub_date')
+        if self.request.user != author:
+            instance = author.posts.filter(
+                author=author, is_published=True
+            ).annotate(comment_count=Count('comments')).order_by('-pub_date')
+            
         return instance
 
 
