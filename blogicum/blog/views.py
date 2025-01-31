@@ -147,7 +147,6 @@ class ProfileListView(ListView):
             instance = author.posts.filter(
                 author=author, is_published=True
             ).annotate(comment_count=Count('comments')).order_by('-pub_date')
-            
         return instance
 
 
