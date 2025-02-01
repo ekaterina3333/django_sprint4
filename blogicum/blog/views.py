@@ -140,13 +140,10 @@ class ProfileListView(ListView):
 
     def get_queryset(self):
         author = get_object_or_404(User, username=self.kwargs.get('username'))
-        instance = author.posts.filter(
-            author=author).annotate(comment_count=Count('comments')
-                                    ).order_by('-pub_date')
+        instance = author.posts.annotate(
+            comment_count=Count('comments')).order_by('-pub_date')
         if self.request.user != author:
-            instance = author.posts.filter(
-                author=author, is_published=True
-            ).annotate(comment_count=Count('comments')).order_by('-pub_date')
+            instance = filters_post(author.posts)
         return instance
 
 
